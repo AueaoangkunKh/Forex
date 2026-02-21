@@ -1,0 +1,142 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Trading Dashboard</title>
+    <link rel="stylesheet" href="../style.css">
+    <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+</head>
+
+<body>
+    <div class="container">
+        <div class="header">
+            <h2>📊 Trading Dashboard</h2>
+            <button class="logout-btn" onclick="logout()">Logout</button>
+        </div>
+
+        <div class="main-grid">
+            <div class="card portfolio-card">
+                <div class="card-header">
+                    <h3>Portfolio</h3>
+                    <div class="fund-actions">
+                        <button class="success btn-sm" onclick="openFundModal('deposit')">+ Dep</button>
+                        <button class="danger btn-sm" onclick="openFundModal('withdraw')">- Wid</button>
+                    </div>
+                </div>
+                <div class="kpi-grid">
+                    <div class="kpi-box">
+                        <div class="kpi" id="balance">0</div>
+                        <div class="kpi-label">Balance</div>
+                    </div>
+                    <div class="kpi-box">
+                        <div class="kpi" id="equity">0</div>
+                        <div class="kpi-label">Equity</div>
+                    </div>
+                    <div class="kpi-box">
+                        <div class="kpi" id="totalPnL">0</div>
+                        <div class="kpi-label">Total PNL</div>
+                    </div>
+                    <div class="kpi-box">
+                        <div class="kpi" id="winrate">0%</div>
+                        <div class="kpi-label">Winrate</div>
+                    </div>
+                </div>
+            </div>
+
+            <div class="card add-trade-card">
+                <h3>Add Trade: <span style="color: gold;">XAUUSD</span></h3>
+                <input id="pair" type="hidden" value="XAUUSD">
+                <div class="form-row">
+                    <select id="type">
+                        <option value="Buy">Buy</option>
+                        <option value="Sell">Sell</option>
+                    </select>
+                    <select id="result">
+                        <option value="Win">Win</option>
+                        <option value="Loss">Loss</option>
+                    </select>
+                </div>
+                <input id="risk" type="number" placeholder="จำนวนเงิน (USD)">
+                <button class="primary w-100" onclick="addTrade()">Add Trade</button>
+            </div>
+
+            <div class="card chart-card">
+                <h3>Equity Curve</h3>
+                <div class="chart-wrapper">
+                    <canvas id="equityChart"></canvas>
+                </div>
+            </div>
+
+            <div class="card history-card">
+                <div style="display:flex; justify-content:space-between; align-items:center; margin-bottom:15px;">
+                    <h3 style="margin:0;">Trade History</h3>
+                    <button class="btn-clear-outline btn-sm" onclick="confirmClearAll()">Clear All</button>
+                </div>
+                <div class="table-container">
+                    <table id="historyTable">
+                        <thead>
+                            <tr>
+                                <th>Type</th>
+                                <th>Amount</th>
+                                <th>Result</th>
+                                <th>PNL</th>
+                                <th>Action</th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                        </tbody>
+                    </table>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <div id="fundModal" class="modal">
+        <div class="modal-content">
+            <h3 id="fundModalTitle">Manage Funds</h3>
+            <input id="fundAmount" type="number" placeholder="0.00">
+            <div class="modal-buttons">
+                <button id="fundSubmitBtn" class="primary" onclick="processFund()">Confirm</button>
+                <button class="logout-btn" onclick="closeFundModal()">Cancel</button>
+            </div>
+        </div>
+    </div>
+
+    <div id="editModal" class="modal">
+        <div class="modal-content">
+            <h3>Edit Trade</h3>
+            <input id="editPair" type="text" readonly>
+            <select id="editType">
+                <option value="Buy">Buy</option>
+                <option value="Sell">Sell</option>
+            </select>
+            <input id="editRisk" type="number">
+            <select id="editResult">
+                <option value="Win">Win</option>
+                <option value="Loss">Loss</option>
+            </select>
+            <div class="modal-buttons">
+                <button class="primary" onclick="saveEdit()">Save</button>
+                <button class="danger" onclick="closeModal()">Cancel</button>
+            </div>
+        </div>
+    </div>
+
+    <div id="deleteModal" class="modal">
+        <div class="modal-content delete-modal-content">
+            <div class="delete-icon">🗑️</div>
+            <h3>Delete Trade</h3>
+            <p>Are you sure you want to delete this trade?<br>This action cannot be undone.</p>
+            <div class="modal-buttons">
+                <button class="btn-cancel" onclick="closeDeleteModal()">Cancel</button>
+                <button class="btn-delete-confirm" id="confirmDeleteBtn">Delete</button>
+            </div>
+        </div>
+    </div>
+
+    <script type="module" src="js/dashboard.js"></script>
+</body>
+
+</html>
