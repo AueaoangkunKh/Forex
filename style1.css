@@ -112,3 +112,70 @@ button:hover {
     transform: scale(1.02);
     opacity: 0.9;
 }
+
+/* 1. สร้าง Keyframes สำหรับอนิเมชั่น */
+@keyframes fadeInUp {
+    from {
+        opacity: 0;
+        transform: translateY(30px);
+    }
+    to {
+        opacity: 1;
+        transform: translateY(0);
+    }
+}
+
+@keyframes float {
+    0% { transform: translateY(0px); }
+    50% { transform: translateY(-10px); }
+    100% { transform: translateY(0px); }
+}
+
+/* 2. ใส่กล่อง Login ให้เลื่อนขึ้นมาตอนโหลดหน้าเว็บ */
+.auth-box {
+    animation: fadeInUp 0.8s ease-out forwards;
+}
+
+/* 3. ใส่ลูกเล่นให้โลโก้ขยับขึ้นลงเบาๆ */
+.logo {
+    display: inline-block;
+    animation: float 3s ease-in-out infinite;
+}
+
+/* 4. ใส่ลูกเล่นให้ปุ่มและ Input เมื่อเอาเมาส์ไปชี้หรือคลิก */
+input {
+    transition: all 0.3s ease;
+}
+
+input:focus {
+    transform: scale(1.02); /* ขยายใหญ่ขึ้นนิดหน่อยตอนพิมพ์ */
+    box-shadow: 0 0 15px rgba(59, 130, 246, 0.3);
+}
+
+.btn-login, .btn-register {
+    transition: all 0.3s cubic-bezier(0.175, 0.885, 0.32, 1.275);
+    position: relative;
+    overflow: hidden;
+}
+
+.btn-login:hover, .btn-register:hover {
+    transform: translateY(-3px); /* ลอยขึ้น */
+    box-shadow: 0 10px 20px rgba(0, 0, 0, 0.3);
+    filter: brightness(1.1);
+}
+
+.btn-login:active, .btn-register:active {
+    transform: translateY(-1px); /* ยุบลงตอนคลิก */
+}
+
+/* 5. เพิ่ม Background เคลื่อนไหวนิดๆ (ตัวเลือกเสริม) */
+body {
+    background-size: 200% 200%;
+    animation: gradientBG 15s ease infinite;
+}
+
+@keyframes gradientBG {
+    0% { background-position: 0% 50%; }
+    50% { background-position: 100% 50%; }
+    100% { background-position: 0% 50%; }
+}
