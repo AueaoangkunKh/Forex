@@ -13,9 +13,12 @@
     <div class="container">
         <div class="header">
             <h2>📊 Trading Dashboard</h2>
-            <button class="logout-btn" onclick="logout()">Logout</button>
+            <div style="display: flex; gap: 10px; align-items: center;">
+                <button class="btn-clear-outline btn-sm" onclick="confirmClearAll()" style="height: fit-content;">🔄
+                    Reset All</button>
+                <button class="logout-btn" onclick="logout()">Logout</button>
+            </div>
         </div>
-
         <div class="main-grid">
             <div class="card portfolio-card">
                 <div class="card-header">
@@ -80,7 +83,8 @@
                         <thead>
                             <tr>
                                 <th>Type</th>
-                                <th>Lot</th><th>Amount</th>
+                                <th>Lot</th>
+                                <th>Amount</th>
                                 <th>Result</th>
                                 <th>PNL</th>
                                 <th>Action</th>

@@ -318,22 +318,55 @@ window.closeDeleteModal = function () {
 }
 
 // ฟังก์ชันเรียก Modal ยืนยันการลบทิ้งทั้งหมด
-window.confirmClearAll = function () {
-  if (trades.length === 0) return alert("ไม่มีข้อมูลให้ลบ");
+// 1. ฟังก์ชันเรียก Modal ยืนยันการลบทิ้งทั้งหมด
+window.confirmClearAll = function() {
+    if (trades.length === 0 && balance === 0) return alert("ข้อมูลเป็นค่าเริ่มต้นอยู่แล้ว");
+    
+    const modal = document.getElementById("deleteModal");
+    const modalTitle = modal.querySelector("h3");
+    const modalDesc = modal.querySelector("p");
+    const confirmBtn = document.getElementById("confirmDeleteBtn");
 
-  // เราจะใช้โครงสร้าง Modal ลบอันเดิมมาประยุกต์ใช้
-  const modal = document.getElementById("deleteModal");
-  const modalTitle = modal.querySelector("h3");
-  const modalDesc = modal.querySelector("p");
-  const confirmBtn = document.getElementById("confirmDeleteBtn");
+    modalTitle.innerText = "Reset Portfolio?";
+    modalDesc.innerHTML = "คุณแน่ใจหรือไม่ที่จะล้างข้อมูลทั้งหมด?<br>ประวัติการเทรดและยอดเงินจะถูกรีเซ็ตเป็น <b style='color:var(--red)'>0</b>";
+    
+    modal.classList.add("show");
 
-  modalTitle.innerText = "Clear All Trades?";
-  modalDesc.innerHTML = "คุณแน่ใจหรือไม่ที่จะลบประวัติการเทรดทั้งหมด?<br><b style='color:var(--red)'>ข้อมูลนี้ไม่สามารถกู้คืนได้</b>";
-  modal.classList.add("show");
+    // เปลี่ยนคำสั่งของปุ่มยืนยันใน Modal ให้ไปรันการ Reset แทนการลบรายตัว
+    confirmBtn.onclick = async () => {
+        await executeResetAll();
+    };
+}
 
-  confirmBtn.onclick = async () => {
-    await executeClearAll();
-  };
+// 2. ฟังก์ชันสั่งล้างข้อมูลจริงใน Supabase
+async function executeResetAll() {
+    try {
+        // ลบประวัติการเทรดทั้งหมดของ user นี้
+        const { error: tradeError } = await supabase
+            .from('trades')
+            .delete()
+            .eq('user_id', currentUser.id);
+
+        if (tradeError) throw tradeError;
+
+        // รีเซ็ตยอด Balance ใน portfolio เป็น 0
+        const { error: portError } = await supabase
+            .from('portfolio')
+            .update({ balance: 0 })
+            .eq('user_id', currentUser.id);
+
+        if (portError) throw portError;
+
+        // ปิด Modal และโหลดข้อมูลใหม่
+        closeDeleteModal();
+        balance = 0;
+        await loadTrades(); 
+        renderAll();
+        
+        alert("รีเซ็ตข้อมูลเรียบร้อยแล้ว");
+    } catch (err) {
+        alert("Error resetting data: " + err.message);
+    }
 }
 
 // ฟังก์ชันสั่งลบจริงใน Supabase
