@@ -58,6 +58,7 @@
                         <option value="Loss">Loss</option>
                     </select>
                 </div>
+                <input id="lot" type="number" step="0.01" placeholder="Lot Size (เช่น 0.01)">
                 <input id="risk" type="number" placeholder="จำนวนเงิน (USD)">
                 <button class="primary w-100" onclick="addTrade()">Add Trade</button>
             </div>
@@ -79,7 +80,7 @@
                         <thead>
                             <tr>
                                 <th>Type</th>
-                                <th>Amount</th>
+                                <th>Lot</th><th>Amount</th>
                                 <th>Result</th>
                                 <th>PNL</th>
                                 <th>Action</th>
@@ -112,12 +113,13 @@
                 <option value="Buy">Buy</option>
                 <option value="Sell">Sell</option>
             </select>
-            <input id="editRisk" type="number">
+            <input id="editLot" type="number" step="0.01" placeholder="Lot Size">
+            <input id="editRisk" type="number" placeholder="Amount (USD)">
             <select id="editResult">
                 <option value="Win">Win</option>
                 <option value="Loss">Loss</option>
             </select>
-            <div class="modal-buttons">
+            <div class="modal-  buttons">
                 <button class="primary" onclick="saveEdit()">Save</button>
                 <button class="danger" onclick="closeModal()">Cancel</button>
             </div>
