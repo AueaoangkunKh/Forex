@@ -7,6 +7,7 @@ let currentUser = null
 let currentEditId = null
 let currentFundAction = null
 let tradeIdToDelete = null;
+let allTrades = []; // สร้างตัวแปรเก็บข้อมูลดิบทั้งหมด
 
 document.addEventListener("DOMContentLoaded", init)
 
@@ -37,6 +38,7 @@ async function loadPortfolio() {
   }
 }
 
+// ในฟังก์ชัน loadTrades() ให้เก็บข้อมูลลง allTrades ด้วย
 async function loadTrades() {
   const { data } = await supabase
     .from('trades')
@@ -258,23 +260,35 @@ function renderChart() {
 
 function renderHistory() {
   const tbody = document.querySelector("#historyTable tbody")
-  tbody.innerHTML = trades.length ? "" : `<tr><td colspan="5" style="text-align:center; padding:20px; color:var(--muted);">No trades yet</td></tr>`
+  // ปรับ colspan เป็น 7 ให้คลุมทุกคอลัมน์
+  tbody.innerHTML = trades.length ? "" : `<tr><td colspan="7" style="text-align:center; padding:20px; color:var(--muted);">No trades yet</td></tr>`
 
-  // เรียงจากใหม่ไปเก่า
   trades.slice().reverse().forEach(t => {
     const row = document.createElement("tr")
+    
+    // จัดรูปแบบวันที่และเวลา
+    const dateObj = new Date(t.created_at);
+    const dateStr = dateObj.toLocaleDateString('th-TH', { day: '2-digit', month: '2-digit', year: '2-digit' });
+    const timeStr = dateObj.toLocaleTimeString('th-TH', { hour: '2-digit', minute: '2-digit', hour12: false });
+
     const pnlClass = t.result === "Win" ? "text-win" : "text-loss"
     const pnlSymbol = t.result === "Win" ? "+" : ""
 
     row.innerHTML = `
-      <td>${t.type}</td>
-      <td>${t.lot ? t.lot.toFixed(2) : '-'}</td> <td>${Number(t.risk).toFixed(2)}</td>
+      <td style="font-size: 12px; color: var(--muted); line-height: 1.4;">
+        ${dateStr}<br>${timeStr}
+      </td>
+      <td style="font-weight: 600;">${t.type}</td>
+      <td>${t.lot ? t.lot.toFixed(2) : '0.00'}</td>
+      <td>$${Number(t.risk).toFixed(2)}</td>
       <td><span class="status-badge ${t.result.toLowerCase()}">${t.result}</span></td>
-      <td class="${pnlClass}">${pnlSymbol}${Number(t.pnl).toFixed(2)}</td>
+      <td class="${pnlClass}" style="font-size: 15px;">
+        ${pnlSymbol}${Number(t.pnl).toFixed(2)}
+      </td>
       <td>
-        <div style="display:flex; gap:5px;">
-            <button class="action-btn edit-btn" onclick="editTrade('${t.id}')">Edit</button>
-            <button class="action-btn delete-btn" onclick="deleteTrade('${t.id}')">Delete</button>
+        <div style="display:flex; gap:8px;">
+            <button class="action-btn edit-btn" onclick="editTrade('${t.id}')" style="background:#3b82f6; border-radius:6px; padding: 4px 12px;">Edit</button>
+            <button class="action-btn delete-btn" onclick="deleteTrade('${t.id}')" style="background:#ef4444; border-radius:6px; padding: 4px 12px;">Delete</button>
         </div>
       </td>`
     tbody.appendChild(row)

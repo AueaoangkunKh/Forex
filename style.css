@@ -429,3 +429,45 @@ select:focus {
     box-shadow: 0 4px 12px rgba(239, 68, 68, 0.2);
 }
 
+/* จัดการตารางให้ดูโปร่งและอ่านง่าย */
+#historyTable th {
+    padding: 12px 8px;
+    border-bottom: 1px solid var(--border);
+    font-size: 13px;
+    text-transform: none; /* ตามรูปตัวอย่าง */
+}
+
+#historyTable td {
+    padding: 15px 8px; /* เพิ่มระยะห่างระหว่างแถว */
+    vertical-align: middle;
+}
+
+/* ปรับแต่ง Badge Win/Loss ให้มนและสวยงามขึ้น */
+.status-badge {
+    padding: 4px 10px;
+    border-radius: 4px;
+    font-size: 11px;
+    letter-spacing: 0.5px;
+}
+
+.status-badge.win {
+    background: rgba(34, 197, 94, 0.15);
+    color: #22c55e;
+}
+
+.status-badge.loss {
+    background: rgba(239, 68, 68, 0.15);
+    color: #ef4444;
+}
+
+/* ปรับแต่งปุ่ม Action */
+.action-btn {
+    border: none;
+    font-weight: 500;
+    transition: 0.2s;
+}
+
+.action-btn:hover {
+    filter: brightness(1.2);
+    transform: translateY(-1px);
+}
